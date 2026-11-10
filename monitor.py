@@ -1,4 +1,3 @@
-
 import time
 import requests
 
@@ -18,14 +17,24 @@ def check_website(url: str, timeout: int = 5) -> dict:
     return {'url': url, 'status': 'DOWN', 'http_code': None, 'error': str(error)}
 
 if __name__ == '__main__':
-  test_url = 'https://httpbin.org/status/200'
-  print(f'Pinging {test_url}...')
+  # We replaced the single target_url with a list of multiple URLs
+  urls_to_monitor = [
+      'https://httpbin.org/status/200',
+      'https://httpbin.org/status/404',  # This intentionally simulates a broken link
+      'https://example.com'
+  ]
   
-  result = check_website(test_url)
+  print("Starting RunnerHut Monitor...\n")
   
-  print(f"Status:    {result['status']}")
-  print(f"HTTP Code: {result.get('http_code')}")
-  if 'latency_ms' in result:
-    print(f"Latency:   {result['latency_ms']} ms")
-  if 'error' in result:
-    print(f"Error:     {result['error']}")
+  # The 'for' loop goes through the list one by one
+  for target in urls_to_monitor:
+    print(f'Pinging {target}...')
+    result = check_website(target)
+    
+    print(f"  Status:    {result['status']}")
+    print(f"  HTTP Code: {result.get('http_code')}")
+    if 'latency_ms' in result:
+      print(f"  Latency:   {result['latency_ms']} ms")
+    if 'error' in result:
+      print(f"  Error:     {result['error']}")
+    print("-" * 40)  # Prints a visual divider between results
